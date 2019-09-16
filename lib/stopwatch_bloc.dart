@@ -7,6 +7,10 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:stopwatch_bloc_example/stopwatch_state.dart';
 
+/// This BLoC handles the state of the stopwatch. The stopwatch can either be in a stopped, started
+/// or reset. The BLoC communicates through sinks and streams only and is responsible for formatting
+/// the stopwatch time into a string which is then streamed to listeners - which in this example is
+/// just the UI.
 class StopwatchBloc {
   /// The current state of the stopwatch: stop, start or reset.
   final BehaviorSubject<StopwatchState> _stopwatchState = BehaviorSubject<StopwatchState>.seeded(StopwatchStopState());
@@ -14,7 +18,7 @@ class StopwatchBloc {
   /// The current time of the stopwatch. We seed it with 00:00:00 so that we have a value on first run.
   final BehaviorSubject<String> _stopwatchTime = BehaviorSubject<String>.seeded('00:00:00');
 
-  /// Provided by the Dart framework and providers us with all we need for a stopwatch.
+  /// Provided by the Dart framework and provides us with all we need for a stopwatch.
   final Stopwatch _stopwatch = Stopwatch();
 
   /// A subscription to a timer Observable which fires every 50 milliseconds.
@@ -48,9 +52,9 @@ class StopwatchBloc {
 
   get stopwatchState => _stopwatchState.stream;
 
-  /// This method is called when the state is transition to StopwatchStartState. Here we
+  /// This method is called when the state is transitioned to StopwatchStartState. Here we
   /// start the _stopwatch and then setup an Observable to trigger every 50 milliseconds.
-  /// On each trigger we fetched the elapsed time from the _stopwatch and split it into
+  /// On each trigger we fetch the elapsed time from the _stopwatch and split it into
   /// hundredths, seconds and minutes. We then format a String to show the current
   /// elapsed time and push it into the _stopwatchTime sink. Anything that subscribes
   /// to _stopwatchTime (in this case our UI) will receive the updated String every
@@ -89,7 +93,7 @@ class StopwatchBloc {
   void _reset() {
     _stopwatch.reset();
 
-    /// Push out our reset time
+    /// Push out our reset time.
     _stopwatchTime.add('00:00:00');
 
     /// Put as back to the stopped state.
