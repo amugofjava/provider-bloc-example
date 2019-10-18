@@ -7,6 +7,8 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:stopwatch_bloc_example/stopwatch_state.dart';
 
+import 'stopwatch_state.dart';
+
 /// This BLoC handles the state of the stopwatch. The stopwatch can either be in a stopped, started
 /// or reset. The BLoC communicates through sinks and streams only and is responsible for formatting
 /// the stopwatch time into a string which is then streamed to listeners - which in this example is
@@ -46,11 +48,11 @@ class StopwatchBloc {
     });
   }
 
-  get transitionState => _stopwatchState.add;
+  void Function(StopwatchState) get transitionState => _stopwatchState.add;
 
-  get stopwatchTime => _stopwatchTime.stream;
+  Observable<String> get stopwatchTime => _stopwatchTime.stream;
 
-  get stopwatchState => _stopwatchState.stream;
+  Observable<StopwatchState> get stopwatchState => _stopwatchState.stream;
 
   /// This method is called when the state is transitioned to StopwatchStartState. Here we
   /// start the _stopwatch and then setup an Observable to trigger every 50 milliseconds.
